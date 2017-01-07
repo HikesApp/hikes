@@ -1,6 +1,8 @@
 package com.chekalin.hikes;
 
 import com.chekalin.hikes.dto.HikeDto;
+import com.chekalin.hikes.repositories.HikeRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.emptyArray;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.arrayWithSize;
 import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
@@ -22,16 +30,28 @@ public class HikesApplicationTests {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
+	@Autowired
+	private HikeRepository hikeRepository;
+
+	@Before
+	public void setUp() throws Exception {
+		hikeRepository.deleteAll();
+	}
+
 	@Test
 	public void loadsHikes() {
+		HikeDto testHike1 = restTemplate.postForObject("/hikes", createTestHike("testHike1"), HikeDto.class);
+		HikeDto testHike2 = restTemplate.postForObject("/hikes", createTestHike("testHike2"), HikeDto.class);
+
 		HikeDto[] result = restTemplate.getForObject("/hikes", HikeDto[].class);
 
-		assertThat(result, is(not(emptyArray())));
+		assertThat(result, is(arrayWithSize(2)));
+		assertThat(result, is(arrayContaining(testHike1, testHike2)));
 	}
 
 	@Test
 	public void createsAndGetsHike() {
-		HikeDto hike = HikeDto.builder().name("testHike").build();
+		HikeDto hike = createTestHike("testHike");
 		ResponseEntity<HikeDto> result = restTemplate.postForEntity("/hikes", hike, HikeDto.class);
 
 		assertThat(result.getStatusCode(), is(HttpStatus.CREATED));
@@ -43,5 +63,14 @@ public class HikesApplicationTests {
 		HikeDto loadedHike = restTemplate.getForObject(location, HikeDto.class);
 		assertThat(loadedHike.getName(), is(equalTo(hike.getName())));
 	}
+
+    private HikeDto createTestHike(String name) {
+        return HikeDto.builder()
+                .name(name)
+                .startDate(LocalDate.of(2017, Month.JANUARY, 7))
+                .endDate(LocalDate.of(2017, Month.JANUARY, 8))
+                .distance(new BigDecimal(45.50))
+                .build();
+    }
 
 }

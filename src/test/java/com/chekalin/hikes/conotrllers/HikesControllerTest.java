@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.*;
@@ -59,7 +60,7 @@ public class HikesControllerTest {
         HikeDto newHikeDto = HikeDto.builder().name("newHike").build();
         Hike hike = Hike.builder().build();
         given(hikeMapper.toDomain(newHikeDto)).willReturn(hike);
-        Hike savedHike = Hike.builder().id("newHikesId").build();
+        Hike savedHike = Hike.builder().id(UUID.randomUUID()).build();
         given(hikeService.createHike(hike)).willReturn(savedHike);
         HikeDto expectedMappedHike = HikeDto.builder().build();
         given(hikeMapper.toDto(savedHike)).willReturn(expectedMappedHike);
@@ -68,13 +69,13 @@ public class HikesControllerTest {
 
         assertThat(result.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(result.getHeaders().getLocation().toString(), containsString("/hikes"));
-        assertThat(result.getHeaders().getLocation().toString(), containsString(savedHike.getId()));
+        assertThat(result.getHeaders().getLocation().toString(), containsString(savedHike.getId().toString()));
         assertThat(result.getBody(), is(sameInstance(expectedMappedHike)));
     }
 
     @Test
     public void loadsSingleHike() throws Exception {
-        String hikeId = "hikeId";
+        UUID hikeId = UUID.randomUUID();
         Hike loadedHike = Hike.builder().build();
         given(hikeService.loadById(hikeId)).willReturn(loadedHike);
         HikeDto expectedLoadedDto = new HikeDto();

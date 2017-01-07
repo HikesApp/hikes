@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,7 +31,7 @@ public class HikesController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public HikeDto load(@PathVariable String id) {
+    public HikeDto load(@PathVariable UUID id) {
         return hikeMapper.toDto(hikeService.loadById(id));
     }
 

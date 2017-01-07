@@ -1,43 +1,12 @@
 package com.chekalin.hikes.repositories;
 
 import com.chekalin.hikes.domain.Hike;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
-@Repository
-public class HikeRepository {
+public interface HikeRepository extends JpaRepository<Hike, UUID> {
 
-
-    private Map<String, Hike> hikes = new HashMap<>();
-
-    @PostConstruct
-    public void mockData() {
-        Hike mockHike = Hike.builder()
-                .id(UUID.randomUUID().toString())
-                .name("Seven Sisters")
-                .startDate(LocalDate.of(2016, Month.FEBRUARY, 11))
-                .distance(new BigDecimal(35))
-                .build();
-
-        hikes.put(mockHike.getId(), mockHike);
-    }
-
-
-    public Collection<Hike> findAll() {
-        return hikes.values();
-    }
-
-    public Hike save(Hike hike) {
-        hikes.put(hike.getId(), hike);
-        return hike;
-    }
-
-    public Optional<Hike> findOne(String id) {
-        return Optional.of(hikes.get(id));
-    }
+    Optional<Hike> findById(UUID id);
 }

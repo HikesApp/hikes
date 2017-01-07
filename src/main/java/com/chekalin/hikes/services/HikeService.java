@@ -5,8 +5,10 @@ import com.chekalin.hikes.exceptions.HikeNotFoundException;
 import com.chekalin.hikes.repositories.HikeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.IdGenerator;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class HikeService {
         return hikeRepository.save(hike);
     }
 
-    public Hike loadById(String id) {
-        return hikeRepository.findOne(id).orElseThrow(HikeNotFoundException::new);
+    public Hike loadById(UUID id) {
+        return hikeRepository.findById(id).orElseThrow(HikeNotFoundException::new);
     }
 }
