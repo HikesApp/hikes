@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +37,7 @@ public class HikesController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<HikeDto> createHike(@RequestBody HikeDto hikeDto) {
+    public ResponseEntity<HikeDto> createHike(@RequestBody @Valid HikeDto hikeDto) {
         Hike hike = hikeMapper.toDomain(hikeDto);
         Hike savedHike = hikeService.createHike(hike);
 

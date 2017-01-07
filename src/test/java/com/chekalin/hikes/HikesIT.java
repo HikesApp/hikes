@@ -71,6 +71,12 @@ public class HikesIT {
 		assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
 	}
 
+	@Test
+	public void returnsBadRequestOnInvalidHike() throws Exception {
+		ResponseEntity<HikeDto> response = restTemplate.postForEntity("/hikes/", HikeDto.builder().build(), HikeDto.class);
+		assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+	}
+
 	private HikeDto createTestHike(String name) {
         return HikeDto.builder()
                 .name(name)
