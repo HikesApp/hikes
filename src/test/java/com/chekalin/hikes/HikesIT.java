@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HikesApplicationTests {
+public class HikesIT {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
