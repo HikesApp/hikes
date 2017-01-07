@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -64,7 +65,13 @@ public class HikesIT {
 		assertThat(loadedHike.getName(), is(equalTo(hike.getName())));
 	}
 
-    private HikeDto createTestHike(String name) {
+	@Test
+	public void returns404OnHikeNotFound() throws Exception {
+		ResponseEntity<HikeDto> response = restTemplate.getForEntity("/hikes/" + UUID.randomUUID().toString(), HikeDto.class);
+		assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+	}
+
+	private HikeDto createTestHike(String name) {
         return HikeDto.builder()
                 .name(name)
                 .startDate(LocalDate.of(2017, Month.JANUARY, 7))
