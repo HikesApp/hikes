@@ -10,6 +10,8 @@ import java.time.LocalDate;
 @Builder
 public class Hike {
 
+    private String id;
+
     private String name;
 
     private LocalDate startDate;

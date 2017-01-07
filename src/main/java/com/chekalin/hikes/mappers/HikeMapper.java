@@ -16,4 +16,12 @@ public class HikeMapper {
                 .build();
     }
 
+    public Hike toDomain(HikeDto hikeDto) {
+        return Hike.builder()
+                .name(hikeDto.getName())
+                .startDate(hikeDto.getStartDate())
+                .endDate(hikeDto.getEndDate())
+                .distance(hikeDto.getDistance())
+                .build();
+    }
 }

@@ -33,4 +33,21 @@ public class HikeMapperTest {
         assertThat(hikeDto.getEndDate(), is(equalTo(hike.getEndDate())));
         assertThat(hikeDto.getDistance(), is(closeTo(hike.getDistance(), BigDecimal.ZERO)));
     }
+
+    @Test
+    public void mapsToDomain() throws Exception {
+        HikeDto hikeDto = HikeDto.builder()
+                .name("testHike")
+                .startDate(LocalDate.of(2016, Month.APRIL, 18))
+                .endDate(LocalDate.of(2016, Month.APRIL, 20))
+                .distance(new BigDecimal(120))
+                .build();
+
+        Hike hike = hikeMapper.toDomain(hikeDto);
+
+        assertThat(hike.getName(), is(equalTo(hikeDto.getName())));
+        assertThat(hike.getStartDate(), is(equalTo(hikeDto.getStartDate())));
+        assertThat(hike.getEndDate(), is(equalTo(hikeDto.getEndDate())));
+        assertThat(hike.getDistance(), is(equalTo(hikeDto.getDistance())));
+    }
 }
