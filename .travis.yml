@@ -1,3 +1,10 @@
 language: java
 jdk: oraclejdk8
 script: mvn clean verify
+deploy:
+  provider: heroku
+  api_key:
+    secure: B4ivUIUKFnv/j6i0QT+Jhg2hCa5EVPkKerPBn/PgcSnt/6twboVfbEPvG8McrhbeM2sWGU3jZATbiaQExwdMbQw78mQugxbi9Ix9qfANn5qUpF8vpKw3KQAdY3cLBx+fpQUIT0IVoosjf/G5cyobponc9Gei2kaqVMWTNodru7XqaluBxhFc7jSYof9RvfitKfmE7jSl+pwks/ENmfkD9Ii7RfY8RMt2i3Ny4bbz8MPukJi6uQIgB5nXvFRcvUEb4ZvMy0UArnn2RGjI6XByS8oxPG9W9+KD7of8yRNAN1wNKZnM0tMeEipzW4A4A3/8uVIdplr03faMBEqzNGx/DUTRICljrGmMn4UujYGZHvb/iyi1bGui1851gKm98npkhKoLg9bB3X7+nwY+jnlqbOKUgGqkRkam+K8/CTzIX7ByOjdlEvf/DQwbt1y+quQbiYcK74bR7po344Ber+4L7CrQn3e1S5xjkec5g+GwJz5Zbv3LjZkFLcsF7bPJw4+xknUg5T4qRd0QqKQdVq9ZxCVyS865KeVR3SmVpfVf01E7L//xHLPmDbSZK8wgHjcOEnOYOhlSTS+FT+6FQvkXBh0uCKk7HdEIxxdSFfOvRE6SWcG5YdD7NJM/9KBGAIKncwjLgyV0w37rzAqlF6xy6D950tZahnv+nGS3McBpf7k=
+  app: still-falls-13018
+  on:
+    repo: chekalin/hikes
