@@ -1,6 +1,6 @@
 language: java
 jdk: oraclejdk8
-script: mvn clean verify
+script: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
 deploy:
   provider: heroku
   api_key:
@@ -8,3 +8,7 @@ deploy:
   app: still-falls-13018
   on:
     repo: chekalin/hikes
+addons:
+  sonarqube:
+    token:
+      secure: MCjxsh5Jy57BY5LBUsty3d+ZGeQJE9mbuXIXX8RwCJImldYXvs51JvNk0UDox1Ey0An/sMhXZhMa803I/Sb9AhQ/jPH2yXplXq7k7vHB0xkavf1UL1dWIIfTz5qGvAC7yc1Kcr2b+FLxKCb89mRUYAz/EslaittCsWPBKyBfmqn/3fizoPvvTd43BJZkhVN6EhxYYOBMfTHWb+B1pRMjcCQ6FCqlYVeTXRWN90wSIIE/ignkS++QcPUfdze9KsvGP42vcUkhjoScdxuBBgCASuRqcSqTXsC4NwmzVjR381Zh+94/gGsI2/YQCuZqJnhHPYkLtn9YHgsecZHl9azJ8Zs44x3tpxBNzp2fsoPtYob/CoGT+3FxcrmzbsFpckSOFRhi2df73BPwI6Vd06iayVxgLbw0LN/oLRG4XpbGWWuU75hhtAW0WHVbEmg/Qqb5sizuzCK3eDpmh5nvxaMr/wLZCw0o9lBCf/jdi/+yClVZ+5u0Gr2SmY8Mn+RaU60PMtANpZ7ZkCLg2XXyMab9F8ogl1Qedyjsp1noCI9+sqjUpc4OOqKboQfh/KFAMHRbZHIyPKj5/AsQA9pt8irjYSWlYyzGyzSiiVZTfxzjJoH5Da/mUr+oF9x5KFPe7Z+3qKdJBfTC8iNl38CISGWU7Q9Znj7WOc1/D+cNEQh/Fc0=
