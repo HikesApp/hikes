@@ -10,10 +10,10 @@
                 <constraints nullable="true" primaryKey="true" unique="true"/>
             </column>
             <column name="NAME" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="START_DATE" type="DATE">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="END_DATE" type="DATE"/>
             <column name="DISTANCE" type="NUMBER"/>
