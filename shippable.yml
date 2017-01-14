@@ -1,7 +1,12 @@
 language: java
 jdk: oraclejdk8
+env:
+  global:
+    - APP_NAME_DEV=hikes-service-dev
 build:
   ci:
     - mvn install
     - cp target/surefire-reports/TEST-*.xml shippable/testresults/
     - cp target/failsafe-reports/TEST-*.xml shippable/testresults/
+  on_success:
+    - git push -f git@heroku.com:$APP_NAME_DEV.git master
