@@ -19,6 +19,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HikeServiceTest {
@@ -71,10 +73,30 @@ public class HikeServiceTest {
     }
 
     @Test(expected = HikeNotFoundException.class)
-    public void throwsExceptionWhenHikeNotFound() throws Exception {
+    public void throwsExceptionWhenHikeNotFoundOnFind() throws Exception {
         UUID hikeId = UUID.randomUUID();
         given(hikeRepository.findById(hikeId)).willReturn(Optional.empty());
 
         hikeService.loadById(hikeId);
+    }
+
+    @Test(expected = HikeNotFoundException.class)
+    public void throwsExceptionWhenHikeNotFoundOnDelete() throws Exception {
+        UUID hikeId = UUID.randomUUID();
+
+        given(hikeRepository.findById(hikeId)).willReturn(Optional.empty());
+
+        hikeService.deleteHike(hikeId);
+    }
+
+    @Test
+    public void deletesHike() throws Exception {
+        UUID hikeId = UUID.randomUUID();
+        Hike hike = Hike.builder().build();
+        given(hikeRepository.findById(hikeId)).willReturn(Optional.of(hike));
+
+        hikeService.deleteHike(hikeId);
+
+        verify(hikeRepository).delete(same(hike));
     }
 }

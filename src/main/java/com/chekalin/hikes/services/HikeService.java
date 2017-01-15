@@ -29,4 +29,9 @@ public class HikeService {
     public Hike loadById(UUID id) {
         return hikeRepository.findById(id).orElseThrow(HikeNotFoundException::new);
     }
+
+    public void deleteHike(UUID id) {
+        Hike hike = loadById(id);
+        hikeRepository.delete(hike);
+    }
 }

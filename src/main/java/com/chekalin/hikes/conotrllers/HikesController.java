@@ -58,4 +58,10 @@ public class HikesController {
                 .body(result);
     }
 
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteHike(@PathVariable UUID id) {
+        hikeService.deleteHike(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

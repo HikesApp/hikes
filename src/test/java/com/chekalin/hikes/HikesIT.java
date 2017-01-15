@@ -90,6 +90,17 @@ public class HikesIT {
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
+    @Test
+    public void deletesHike() throws Exception {
+        HikeDto testHike = restTemplate.postForObject("/hikes", createTestHike("testHike"), HikeDto.class);
+
+        restTemplate.delete("/hikes/{id}", testHike.getId());
+
+        ResponseEntity<HikeDto> response = restTemplate.getForEntity("/hikes/{id}", HikeDto.class, testHike.getId());
+
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
     private HikeDto createTestHike(String name) {
         return HikeDto.builder()
                 .name(name)

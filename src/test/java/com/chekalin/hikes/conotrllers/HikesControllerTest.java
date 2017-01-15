@@ -22,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HikesControllerTest {
@@ -92,5 +93,14 @@ public class HikesControllerTest {
         HikeDto hikeWithId = HikeDto.builder().id("someId").build();
 
         hikesController.createHike(hikeWithId);
+    }
+
+    @Test
+    public void deletesHike() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        hikesController.deleteHike(id);
+
+        verify(hikeService).deleteHike(id);
     }
 }
