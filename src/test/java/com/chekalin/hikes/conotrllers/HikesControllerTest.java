@@ -2,6 +2,7 @@ package com.chekalin.hikes.conotrllers;
 
 import com.chekalin.hikes.domain.Hike;
 import com.chekalin.hikes.dto.HikeDto;
+import com.chekalin.hikes.exceptions.HikeWithIdPassedToCreateException;
 import com.chekalin.hikes.mappers.HikeMapper;
 import com.chekalin.hikes.services.HikeService;
 import org.junit.Test;
@@ -84,5 +85,12 @@ public class HikesControllerTest {
         HikeDto result = hikesController.load(hikeId);
 
         assertThat(result, is(sameInstance(expectedLoadedDto)));
+    }
+
+    @Test(expected = HikeWithIdPassedToCreateException.class)
+    public void throwsExceptionWhenTryingToSaveHikeWithId() throws Exception {
+        HikeDto hikeWithId = HikeDto.builder().id("someId").build();
+
+        hikesController.createHike(hikeWithId);
     }
 }

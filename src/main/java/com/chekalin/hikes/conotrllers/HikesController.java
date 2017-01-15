@@ -2,6 +2,7 @@ package com.chekalin.hikes.conotrllers;
 
 import com.chekalin.hikes.domain.Hike;
 import com.chekalin.hikes.dto.HikeDto;
+import com.chekalin.hikes.exceptions.HikeWithIdPassedToCreateException;
 import com.chekalin.hikes.mappers.HikeMapper;
 import com.chekalin.hikes.services.HikeService;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,10 @@ public class HikesController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<HikeDto> createHike(@RequestBody @Valid HikeDto hikeDto) {
+        if (hikeDto.getId() != null) {
+            throw new HikeWithIdPassedToCreateException();
+        }
+
         Hike hike = hikeMapper.toDomain(hikeDto);
         Hike savedHike = hikeService.createHike(hike);
 

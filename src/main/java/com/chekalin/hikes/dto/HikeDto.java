@@ -16,6 +16,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class HikeDto {
 
+    private String id;
+
     @NotNull
     private String name;
 
