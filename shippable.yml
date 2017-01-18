@@ -3,10 +3,11 @@ jdk: oraclejdk8
 env:
   global:
     - APP_NAME_DEV=hikes-service-dev
+    - secure: TyKCC3sTYLlOGDkfregf+amjaWpDyuS/fuLTQ3LJ1I0Y2glsVHsIU36XHVaYRA5os/+TMgvn5e76ho4Ta8qIFxqv0IoWQ4nBaH9DG1q3EpFZ3eSypZ7Mz3NnfvyGXSW7XBSjHb2RMa+ttOu1aCJ6BluZTdkLLPwUq2C/7BhJn/4xbvvPHsc+fxF/6olG4f/zjG1Ljfcbx7IXL5nQDm/SSrX39qbjSTqQsudAE5d/3toVmxMXpKWZDuzsdL9zbTQZWogw9taa0Z/ODR+vz7e2Nx/7tHm9VA6Ei0Uf+CecdAA2xXWzcIbZnbnoel1NP8so5gryxtYxIQ5ZP3k0yqTzqA==
 build:
   ci:
     - mvn install
     - cp target/surefire-reports/TEST-*.xml shippable/testresults/
     - cp target/failsafe-reports/TEST-*.xml shippable/testresults/
   on_success:
-    - mvn -DskipTests heroku:deploy
+    - mvn heroku:deploy -DskipTests -Dheroku.appName=$APP_NAME_DEV
