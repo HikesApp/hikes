@@ -9,4 +9,4 @@ build:
     - cp target/surefire-reports/TEST-*.xml shippable/testresults/
     - cp target/failsafe-reports/TEST-*.xml shippable/testresults/
   on_success:
-    - git push -f git@heroku.com:$APP_NAME_DEV.git master
+    - mvn -DskipTests heroku:deploy
