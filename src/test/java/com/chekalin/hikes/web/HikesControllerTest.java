@@ -1,8 +1,5 @@
 package com.chekalin.hikes.web;
 
-import com.chekalin.hikes.domain.Hike;
-import com.chekalin.hikes.exceptions.HikeWithIdPassedToCreateException;
-import com.chekalin.hikes.service.HikeMapper;
 import com.chekalin.hikes.service.HikeService;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,9 +15,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -32,60 +29,42 @@ public class HikesControllerTest {
     private HikesController hikesController;
 
     @Mock
-    private HikeMapper hikeMapper;
-
-    @Mock
     private HikeService hikeService;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void loadsAllHikesFromServiceAndMapsThem() throws Exception {
-        Hike testHike1 = Hike.builder()
-                .name("testHike1")
-                .build();
-        Hike testHike2 = Hike.builder()
-                .name("testHike2")
-                .build();
+    public void loadAllHikesShouldReturnAllHikesFromService() throws Exception {
+        List<HikeDto> expectedHikes = newArrayList();
 
-        given(hikeService.loadHikes()).willReturn(newArrayList(testHike1, testHike2));
-        HikeDto expectedHike1 = HikeDto.builder().name("mapped1").build();
-        given(hikeMapper.toDto(testHike1)).willReturn(expectedHike1);
-        HikeDto expectedHike2 = HikeDto.builder().name("mapped2").build();
-        given(hikeMapper.toDto(testHike2)).willReturn(expectedHike2);
+        given(hikeService.loadHikes()).willReturn(expectedHikes);
 
         List<HikeDto> result = hikesController.loadAllHikes();
 
-        assertThat(result, hasSize(2));
-        assertThat(result, hasItems(expectedHike1, expectedHike2));
+        assertThat(result, is(sameInstance(expectedHikes)));
     }
 
     @Test
-    public void createsNewHike() throws Exception {
-        HikeDto newHikeDto = HikeDto.builder().name("newHike").build();
-        Hike hike = Hike.builder().build();
-        given(hikeMapper.toDomain(newHikeDto)).willReturn(hike);
-        Hike savedHike = Hike.builder().id(UUID.randomUUID()).build();
-        given(hikeService.createHike(hike)).willReturn(savedHike);
-        HikeDto expectedMappedHike = HikeDto.builder().build();
-        given(hikeMapper.toDto(savedHike)).willReturn(expectedMappedHike);
+    public void createHikeShouldCreateNewHike() throws Exception {
+        String savedHikeId = "hikeId";
+        HikeDto newHike = HikeDto.builder().name("newHike").build();
+        HikeDto savedHike = HikeDto.builder().id(savedHikeId).build();
+        given(hikeService.createHike(newHike)).willReturn(savedHike);
 
-        ResponseEntity<HikeDto> result = hikesController.createHike(newHikeDto);
+        ResponseEntity<HikeDto> result = hikesController.createHike(newHike);
 
         assertThat(result.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(result.getHeaders().getLocation().toString(), containsString("/hikes"));
-        assertThat(result.getHeaders().getLocation().toString(), containsString(savedHike.getId().toString()));
-        assertThat(result.getBody(), is(sameInstance(expectedMappedHike)));
+        assertThat(result.getHeaders().getLocation().toString(), containsString(savedHikeId));
+        assertThat(result.getBody(), is(sameInstance(savedHike)));
     }
 
     @Test
-    public void loadsSingleHike() throws Exception {
+    public void loadShouldReturnHikeFromService() throws Exception {
         UUID hikeId = UUID.randomUUID();
-        Hike loadedHike = Hike.builder().build();
-        given(hikeService.loadById(hikeId)).willReturn(loadedHike);
         HikeDto expectedLoadedDto = new HikeDto();
-        given(hikeMapper.toDto(loadedHike)).willReturn(expectedLoadedDto);
+        given(hikeService.loadById(hikeId)).willReturn(expectedLoadedDto);
 
         HikeDto result = hikesController.load(hikeId);
 
@@ -93,16 +72,7 @@ public class HikesControllerTest {
     }
 
     @Test
-    public void throwsExceptionWhenTryingToSaveHikeWithId() throws Exception {
-        HikeDto hikeWithId = HikeDto.builder().id("someId").build();
-
-        expectedException.expect(HikeWithIdPassedToCreateException.class);
-
-        hikesController.createHike(hikeWithId);
-    }
-
-    @Test
-    public void deletesHike() throws Exception {
+    public void deleteHikeShouldDeleteHike() throws Exception {
         UUID id = UUID.randomUUID();
 
         hikesController.deleteHike(id);

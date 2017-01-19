@@ -1,9 +1,7 @@
 package com.chekalin.hikes.web;
 
-import com.chekalin.hikes.domain.Hike;
 import com.chekalin.hikes.exceptions.HikeNotFoundException;
 import com.chekalin.hikes.exceptions.HikeWithIdPassedToCreateException;
-import com.chekalin.hikes.service.HikeMapper;
 import com.chekalin.hikes.service.HikeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,48 +13,36 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/hikes")
 @AllArgsConstructor
 public class HikesController {
 
-    private final HikeMapper hikeMapper;
-
     private final HikeService hikeService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<HikeDto> loadAllHikes() {
-        return hikeService.loadHikes().stream()
-                .map(hikeMapper::toDto)
-                .collect(Collectors.toList());
+        return hikeService.loadHikes();
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public HikeDto load(@PathVariable UUID id) {
-        return hikeMapper.toDto(hikeService.loadById(id));
+        return hikeService.loadById(id);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<HikeDto> createHike(@RequestBody @Valid HikeDto hikeDto) {
-        if (hikeDto.getId() != null) {
-            throw new HikeWithIdPassedToCreateException();
-        }
-
-        Hike hike = hikeMapper.toDomain(hikeDto);
-        Hike savedHike = hikeService.createHike(hike);
+        HikeDto savedHike = hikeService.createHike(hikeDto);
 
         URI location = UriComponentsBuilder
                 .fromPath("/hikes/{id}")
                 .buildAndExpand(savedHike.getId())
                 .toUri();
 
-        HikeDto result = hikeMapper.toDto(savedHike);
-
         return ResponseEntity
                 .created(location)
-                .body(result);
+                .body(savedHike);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
