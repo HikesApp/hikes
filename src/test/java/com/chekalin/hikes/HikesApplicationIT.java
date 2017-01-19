@@ -1,7 +1,7 @@
 package com.chekalin.hikes;
 
-import com.chekalin.hikes.web.HikeDto;
 import com.chekalin.hikes.domain.HikeRepository;
+import com.chekalin.hikes.web.HikeDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.junit.Assert.assertThat;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
-public class HikesIT {
+public class HikesApplicationIT {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -62,32 +62,8 @@ public class HikesIT {
         HikeDto savedHike = result.getBody();
         assertThat(savedHike.getName(), is(equalTo(hike.getName())));
 
-        String location = result.getHeaders().getLocation().toString();
-        HikeDto loadedHike = restTemplate.getForObject(location, HikeDto.class);
-        assertThat(loadedHike.getName(), is(equalTo(hike.getName())));
-    }
-
-    @Test
-    public void returns404OnHikeNotFound() throws Exception {
-        ResponseEntity<HikeDto> response = restTemplate.getForEntity("/hikes/" + UUID.randomUUID().toString(), HikeDto.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
-    }
-
-    @Test
-    public void returnsBadRequestOnInvalidHike() throws Exception {
-        ResponseEntity<HikeDto> response = restTemplate.postForEntity("/hikes/", HikeDto.builder().build(), HikeDto.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-    }
-
-    @Test
-    public void returnsBadRequestOnHikeWIthId() throws Exception {
-        HikeDto hike = HikeDto.builder()
-                .id(UUID.randomUUID().toString())
-                .name("something")
-                .startDate(LocalDate.now())
-                .build();
-        ResponseEntity<HikeDto> response = restTemplate.postForEntity("/hikes/", hike, HikeDto.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+        HikeDto loadedHike = restTemplate.getForObject("/hikes/" + savedHike.getId(), HikeDto.class);
+        assertThat(loadedHike, is(notNullValue()));
     }
 
     @Test
