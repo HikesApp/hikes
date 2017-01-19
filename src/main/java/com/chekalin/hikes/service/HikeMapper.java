@@ -1,7 +1,7 @@
-package com.chekalin.hikes.mappers;
+package com.chekalin.hikes.service;
 
 import com.chekalin.hikes.domain.Hike;
-import com.chekalin.hikes.dto.HikeDto;
+import com.chekalin.hikes.web.HikeDto;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

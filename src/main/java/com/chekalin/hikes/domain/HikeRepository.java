@@ -1,6 +1,5 @@
-package com.chekalin.hikes.repositories;
+package com.chekalin.hikes.domain;
 
-import com.chekalin.hikes.domain.Hike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

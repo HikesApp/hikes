@@ -1,7 +1,8 @@
-package com.chekalin.hikes.mappers;
+package com.chekalin.hikes.service;
 
 import com.chekalin.hikes.domain.Hike;
-import com.chekalin.hikes.dto.HikeDto;
+import com.chekalin.hikes.service.HikeMapper;
+import com.chekalin.hikes.web.HikeDto;
 import org.junit.Test;
 
 import java.math.BigDecimal;

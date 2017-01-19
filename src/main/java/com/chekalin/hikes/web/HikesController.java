@@ -1,10 +1,9 @@
-package com.chekalin.hikes.conotrllers;
+package com.chekalin.hikes.web;
 
 import com.chekalin.hikes.domain.Hike;
-import com.chekalin.hikes.dto.HikeDto;
 import com.chekalin.hikes.exceptions.HikeWithIdPassedToCreateException;
-import com.chekalin.hikes.mappers.HikeMapper;
-import com.chekalin.hikes.services.HikeService;
+import com.chekalin.hikes.service.HikeMapper;
+import com.chekalin.hikes.service.HikeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,7 @@
-package com.chekalin.hikes.repositories;
+package com.chekalin.hikes.domain;
 
 import com.chekalin.hikes.domain.Hike;
+import com.chekalin.hikes.domain.HikeRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

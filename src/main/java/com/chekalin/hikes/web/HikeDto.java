@@ -1,4 +1,4 @@
-package com.chekalin.hikes.dto;
+package com.chekalin.hikes.web;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

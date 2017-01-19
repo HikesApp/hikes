@@ -1,8 +1,8 @@
-package com.chekalin.hikes.services;
+package com.chekalin.hikes.service;
 
 import com.chekalin.hikes.domain.Hike;
 import com.chekalin.hikes.exceptions.HikeNotFoundException;
-import com.chekalin.hikes.repositories.HikeRepository;
+import com.chekalin.hikes.domain.HikeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.IdGenerator;
