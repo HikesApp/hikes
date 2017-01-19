@@ -3,7 +3,9 @@ package com.chekalin.hikes.services;
 import com.chekalin.hikes.domain.Hike;
 import com.chekalin.hikes.exceptions.HikeNotFoundException;
 import com.chekalin.hikes.repositories.HikeRepository;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -36,6 +38,9 @@ public class HikeServiceTest {
 
     @Captor
     private ArgumentCaptor<Hike> hikeArgumentCaptor;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void loadsAllHikes() throws Exception {
@@ -72,19 +77,22 @@ public class HikeServiceTest {
         assertThat(result, is(sameInstance(expectedHike)));
     }
 
-    @Test(expected = HikeNotFoundException.class)
+    @Test
     public void throwsExceptionWhenHikeNotFoundOnFind() throws Exception {
         UUID hikeId = UUID.randomUUID();
         given(hikeRepository.findById(hikeId)).willReturn(Optional.empty());
 
+        expectedException.expect(HikeNotFoundException.class);
+
         hikeService.loadById(hikeId);
     }
 
-    @Test(expected = HikeNotFoundException.class)
+    @Test
     public void throwsExceptionWhenHikeNotFoundOnDelete() throws Exception {
         UUID hikeId = UUID.randomUUID();
 
         given(hikeRepository.findById(hikeId)).willReturn(Optional.empty());
+        expectedException.expect(HikeNotFoundException.class);
 
         hikeService.deleteHike(hikeId);
     }

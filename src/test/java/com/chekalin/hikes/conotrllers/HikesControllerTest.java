@@ -5,7 +5,9 @@ import com.chekalin.hikes.dto.HikeDto;
 import com.chekalin.hikes.exceptions.HikeWithIdPassedToCreateException;
 import com.chekalin.hikes.mappers.HikeMapper;
 import com.chekalin.hikes.services.HikeService;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,6 +37,9 @@ public class HikesControllerTest {
 
     @Mock
     private HikeService hikeService;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void loadsAllHikesFromServiceAndMapsThem() throws Exception {
@@ -88,9 +93,11 @@ public class HikesControllerTest {
         assertThat(result, is(sameInstance(expectedLoadedDto)));
     }
 
-    @Test(expected = HikeWithIdPassedToCreateException.class)
+    @Test
     public void throwsExceptionWhenTryingToSaveHikeWithId() throws Exception {
         HikeDto hikeWithId = HikeDto.builder().id("someId").build();
+
+        expectedException.expect(HikeWithIdPassedToCreateException.class);
 
         hikesController.createHike(hikeWithId);
     }
