@@ -1,10 +1,12 @@
 package com.chekalin.hikes.web;
 
 import com.chekalin.hikes.domain.Hike;
+import com.chekalin.hikes.exceptions.HikeNotFoundException;
 import com.chekalin.hikes.exceptions.HikeWithIdPassedToCreateException;
 import com.chekalin.hikes.service.HikeMapper;
 import com.chekalin.hikes.service.HikeService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -61,6 +63,16 @@ public class HikesController {
     public ResponseEntity<Void> deleteHike(@PathVariable UUID id) {
         hikeService.deleteHike(id);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such Hike")
+    private void handleHikeNotFound(HikeNotFoundException ex) {
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "ID should be empty for new hikes")
+    private void handleHikeWithIdPassedToCreate(HikeWithIdPassedToCreateException ex) {
     }
 
 }
